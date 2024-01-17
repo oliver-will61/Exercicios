@@ -1,4 +1,11 @@
-const pergutas = [
+const readline = require('readline');
+
+const rl = readline.createInterface({
+    input: process.stdin,
+    output: process.stdout
+})
+
+const perguntas = [
     {
         pergunta: "Qual é o nome do protagonista da série Harry Potter?",
         opcoes: ["Ron Weasley", "Hermione Granger", "Harry Potter", "Draco Malfoy"],
@@ -27,19 +34,31 @@ const pergutas = [
 ]
 
 
-exibePergunta();
-
-function exibePergunta(){
-
+async function exibePergunta(){
+    
     const numeroOpcoes = ['1', '2', '3', '4']
-    let numeroDaPergunta = 0;
 
-    pergutas.forEach((indice)=>{
-        console.log("\n"+indice.pergunta + "\n")
-        let i =0
-        while(i <= indice.opcoes.length -1){
-            console.log(`${numeroOpcoes[i]} - ${indice.opcoes[i]}`);
-            i++
-        }
+    for(const pergunta of perguntas){
+        console.log("\n"+pergunta.pergunta + "\n")
+
+        pergunta.opcoes.forEach((opcao, index) => {
+            console.log(`${numeroOpcoes[index]} - ${opcao}`)
+        });
+
+        const resposta = await input('Digite sua resposta: ');
+        console.log(`sua resposta foi: ${resposta}`)
+    }
+
+    rl.close();
+}
+
+function input(pergunta){
+
+    return new Promise((resolved)=>{
+        rl.question(pergunta, (answer) => {
+            resolved(answer)
+        })
     })
 }
+
+exibePergunta();
